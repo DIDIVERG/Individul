@@ -1,0 +1,110 @@
+﻿<Window x:Class="indvidual.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:indvidual"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="750" Width="800"
+        DataContext="{Binding MainViewModel, Source={StaticResource Locator} }"
+        >
+    
+    <Grid>
+        <TabControl>
+            <!-- Таб "Создать отчет" -->
+            <TabItem Header="Создать Отчет">
+                <StackPanel>
+                    <DataGrid Height="100px" SelectedItem="{Binding EmployeeViewModel.SelectedEmployee}" 
+                              ItemsSource="{Binding EmployeeViewModel.Employees}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                            <DataGridTextColumn Header="Department" Binding="{Binding Department}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                        <Label Content="Сумма:" Margin="5" />
+                        <TextBox Text="{Binding SubReportViewModel.SubReport.Amount}" Margin="5" />
+                   
+                        <Label Content="Цель:" Margin="5" />
+                        <TextBox Height="100px" Text="{Binding SubReportViewModel.SubReport.Purpose}" Margin="5" />
+                        <Label Content="ID работника:" Margin="5" />
+                        <TextBox IsReadOnly="True"  
+                                 Text="{Binding EmployeeViewModel.SelectedEmployee.Id}" Margin="5" />
+                    <Button Content="Добавить" Command="{Binding SubReportViewModel.AddSubReportAsyncCommand }" Margin="5" />
+                </StackPanel>
+            </TabItem>
+
+            <!-- Таб "Отчеты" -->
+            <TabItem Header="Добавить отчет о расходах">
+                <StackPanel>
+                    <Button Content="Добавить отчет" Command="{Binding ExpenseViewModel.CreateExpenseReportAsyncCommand }" Margin="5" />
+                    <DataGrid 
+                        Height="100px" SelectedItem="{Binding SubReportViewModel.SelectedSubReport}" 
+                              ItemsSource="{Binding SubReportViewModel.SubReports}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                            <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />
+                            <DataGridTextColumn Header="Purpose" Binding="{Binding Purpose}" />
+                            <DataGridTextColumn Header="ReceiveDate" Binding="{Binding RecievedDate}" />
+                            <DataGridTextColumn Header="EmployeeId" Binding="{Binding EmployeeId}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid Height="100px" SelectedItem="{Binding ExpenseViewModel.SelectedExpense}" 
+                              ItemsSource="{Binding ExpenseViewModel.CurrentExpenses}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                            <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />
+                            <DataGridTextColumn Header="Purpose" Binding="{Binding Item}" />
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Label Content="Id работника:" Margin="5" />
+                    <TextBox  
+                        Text="{Binding ExpenseViewModel.EmployeeId}" Margin="5" />
+                    <Label Content="Потраченная сумма:" Margin="5" />
+                    <TextBox Text="{Binding ExpenseViewModel.Expense.Amount}" Margin="5" />
+                   
+                    <Label Content="Цель:" Margin="5" />
+                    <TextBox Height="100px" Text="{Binding ExpenseViewModel.Expense.Item}" Margin="5" />
+                    <Label Content="Количество:" Margin="5" />
+                    <TextBox  
+                             Text="{Binding ExpenseViewModel.Expense.Quantity}" Margin="5" />
+                    <Button Content="Добавить статью" Command="{Binding ExpenseViewModel.AddExpenseAsyncCommand }" Margin="5" />
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Статьи">
+                <StackPanel>
+                    <DataGrid Height="100px"
+                              ItemsSource="{Binding ExpenseViewModel.Expenses}" AutoGenerateColumns="False"
+                              SelectionMode="Extended" SelectionUnit="FullRow"
+                              x:Name="DataGridArticles">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                            <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />
+                            <DataGridTextColumn Header="Purpose" Binding="{Binding Item}" />
+                            <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
+                            <DataGridTextColumn Header="ReportId" Binding="{Binding ExpenseReportId}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                    <Button Click="ButtonBase_OnClick" Content="Сформировать отчет" Margin="5" />
+                </StackPanel>
+            </TabItem>
+
+            <!-- Таб "Отчет по времени" -->
+            <TabItem Header="Отчет по времени">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <TextBlock Text="От" />
+                        <DatePicker x:Name="DatePicker" Margin="5" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <TextBlock Text="До" />
+                        <DatePicker x:Name="DatePicker2" Margin="5" />
+                    </StackPanel>
+                    <Button Height="50px" Content="Сформировать отчет" Click="GenerateReport_Click" Margin="5" />
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
